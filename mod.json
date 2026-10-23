@@ -20,19 +20,19 @@
       "default": false
     },
     "buffer-frames": {
-      "name": "Buffer frames",
-      "description": "Frames to delay each input event (0-3). This is delay/replay, not automatic frame-perfect detection.",
-      "type": "int",
-      "default": 1,
-      "min": 0,
-      "max": 3,
-      "control": {
-        "slider": true,
-        "slider-step": 1,
-        "arrows": true,
-        "arrow-step": 1,
-        "input": false
-      }
+  "name": "Buffer frames",
+  "description": "Frames to buffer inputs (0-14).",
+  "type": "int",
+  "default": 1,
+  "min": 0,
+  "max": 14,
+  "control": {
+    "slider": true,
+    "slider-step": 1,
+    "arrows": true,
+    "arrow-step": 1,
+    "input": false
+  }
     }
   }
 }
