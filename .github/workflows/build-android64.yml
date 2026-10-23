@@ -14,9 +14,10 @@ jobs:
           target: Android64
           sdk: latest
 
+
       - name: Upload mod
         uses: actions/upload-artifact@v4
         with:
           name: PredictiveInputBuffer-Android64
-          path: build-android64/*.geode
+          path: output/*.geode
           if-no-files-found: error
