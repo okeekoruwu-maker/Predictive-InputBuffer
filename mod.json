@@ -1,7 +1,7 @@
 {
   "geode": "5.11.2",
   "gd": {
-    "android": "2.2083"
+    "android": "2.2081"
   },
   "id": "jlmh.predictive-input-buffer",
   "name": "Predictive Input Buffer",
