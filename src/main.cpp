@@ -12,12 +12,16 @@ struct BufferedInput {
 };
 
 class $modify(InputBufferLayer, GJBaseGameLayer) {
-    std::deque<BufferedInput> inputQueue;
-    int frameCounter = 0;
-    bool replayingInput = false;
+    struct Fields {
+        std::deque<BufferedInput> inputQueue;
+        int frameCounter = 0;
+        bool replayingInput = false;
+    };
 
     void handleButton(bool down, int button, bool isPlayer1) {
-        if (replayingInput ||
+        auto* fields = m_fields.self();
+
+        if (fields->replayingInput ||
             !Mod::get()->getSettingValue<bool>("enabled")) {
             GJBaseGameLayer::handleButton(
                 down, button, isPlayer1
@@ -25,8 +29,8 @@ class $modify(InputBufferLayer, GJBaseGameLayer) {
             return;
         }
 
-        int delay = Mod::get()->getSettingValue<int64_t>(
-            "buffer-frames"
+        int delay = static_cast<int>(
+            Mod::get()->getSettingValue<int64_t>("buffer-frames")
         );
 
         if (delay <= 0) {
@@ -36,30 +40,32 @@ class $modify(InputBufferLayer, GJBaseGameLayer) {
             return;
         }
 
-        inputQueue.push_back({
+        fields->inputQueue.push_back({
             down,
             button,
             isPlayer1,
-            frameCounter + delay
+            fields->frameCounter + delay
         });
     }
 
     void update(float dt) {
         GJBaseGameLayer::update(dt);
-        frameCounter++;
 
-        while (!inputQueue.empty() &&
-               inputQueue.front().targetFrame <= frameCounter) {
-            auto input = inputQueue.front();
-            inputQueue.pop_front();
+        auto* fields = m_fields.self();
+        fields->frameCounter++;
 
-            replayingInput = true;
+        while (!fields->inputQueue.empty() &&
+               fields->inputQueue.front().targetFrame <= fields->frameCounter) {
+            auto input = fields->inputQueue.front();
+            fields->inputQueue.pop_front();
+
+            fields->replayingInput = true;
             GJBaseGameLayer::handleButton(
                 input.down,
                 input.button,
                 input.player1
             );
-            replayingInput = false;
+            fields->replayingInput = false;
         }
     }
 };
